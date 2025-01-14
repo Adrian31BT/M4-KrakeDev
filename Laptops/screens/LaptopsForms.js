@@ -1,7 +1,7 @@
 import { View, Text, StyleSheet, Alert } from "react-native";
 import { Input, Button } from "@rneui/base";
 import { useState } from "react";
-import { saveLaptopRest, updateLaptopRest } from "../rest_client/laptops";
+import { saveLaptopRest, updateLaptopRest, deleteLaptopRest } from "../rest_client/laptops";
 
 export const LaptopsForms = ({ navigation, route }) => {
   let laptopRetrieved = route.params.laptopParam;
@@ -19,8 +19,8 @@ export const LaptopsForms = ({ navigation, route }) => {
   );
   const [disco, setDisco] = useState(isNew ? null : laptopRetrieved.disco);
 
-  const showMessage = () => {
-    Alert.alert("Ok,", isNew ? "Se agregó la laptop" : "Laptop actualizada");
+  const showMessage = (message) => {
+    Alert.alert("Ok,", message);
     navigation.goBack();
   };
   const createLaptop = () => {
@@ -32,10 +32,32 @@ export const LaptopsForms = ({ navigation, route }) => {
 
   const updateLaptop = () => {
     updateLaptopRest(
-      { id:laptopRetrieved.id, marca: marca, procesador: procesador, memoria: memoria, disco: disco },
+      {
+        id: laptopRetrieved.id,
+        marca: marca,
+        procesador: procesador,
+        memoria: memoria,
+        disco: disco,
+      },
       showMessage
     );
   };
+
+  const confirmDelete = () => {
+    Alert.alert("Advertencia", "¿Esta seguro que quiere eliminar?", [
+      { text: "Si", 
+        onPress:deleteLaptop
+      },
+      {
+        text: "Cancelar",
+        style: "cancel",
+      }]
+    );
+  };
+
+  const deleteLaptop=()=>{
+    deleteLaptopRest({id:laptopRetrieved.id}, showMessage);
+  }
 
   return (
     <View style={styles.container}>
@@ -68,6 +90,11 @@ export const LaptopsForms = ({ navigation, route }) => {
         }}
       />
       <Button title="Guardar" onPress={isNew ? createLaptop : updateLaptop} />
+      {isNew ? (
+        <View></View>
+      ) : (
+        <Button title="Eliminar" onPress={confirmDelete} />
+      )}
     </View>
   );
 };

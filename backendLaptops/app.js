@@ -52,7 +52,7 @@ app.put("/laptops/:idParams", (request, response)=>{
 app.delete("/laptops/:idParams", (request, response)=>{
     const id = request.params.idParams;
     console.log("id: "+id);
-    response.send()
+    response.send({id:id})
 });
 
 app.listen(port, ()=>{

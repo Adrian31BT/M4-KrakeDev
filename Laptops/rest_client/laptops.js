@@ -30,7 +30,7 @@ export const saveLaptopRest = (laptop, fnShowMessage) => {
       return response.json();
     })
     .then((laptops) => {
-      fnShowMessage();
+      fnShowMessage("Se ha agregado laptop");
       console.log(laptops);
     });
 };
@@ -55,8 +55,34 @@ export const updateLaptopRest = (laptop, fnShowMessage) => {
       return response.json();
     })
     .then((laptops) => {
-      fnShowMessage();
+      fnShowMessage("Se ha actualizado laptop");
       console.log(laptops);
     });
 };
+
+
+export const deleteLaptopRest = (laptop, fnShowMessage) => {
+  const config = {
+    method: "DELETE",
+    /* headers: {
+      "Content-type": "application/json",
+    },
+    body: JSON.stringify({
+      id: laptop.id,
+      marca: laptop.marca,
+      procesador: laptop.procesador,
+      memoria: laptop.memoria,
+      disco: laptop.disco,
+    }) */
+  };
+  fetch(URL + "laptops/"+laptop.id, config)
+    .then((response) => {
+      return response.json();
+    })
+    .then((laptops) => {
+      fnShowMessage("Se ha eliminado laptop");
+      console.log(laptops);
+    });
+};
+
 
