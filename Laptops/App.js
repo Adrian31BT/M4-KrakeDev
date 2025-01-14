@@ -1,15 +1,17 @@
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { LaptopsList } from "./screens/LaptopsList";
+import { LaptopsForms } from "./screens/LaptopsForms"
 
 export default function App() {
-  const StackContacts = createNativeStackNavigator();
+  const StackLaptops = createNativeStackNavigator();
 
   return (
     <NavigationContainer>
-      <StackContacts.Navigator>
-        <StackContacts.Screen name="LaptopsListNav" component={LaptopsList} />
-      </StackContacts.Navigator>
+      <StackLaptops.Navigator initialRouteName="LaptopsListNav">
+        <StackLaptops.Screen name="LaptopsListNav" component={LaptopsList} />
+        <StackLaptops.Screen name="LaptopsFormsNav" component={LaptopsForms} />
+      </StackLaptops.Navigator>
     </NavigationContainer>
   );
 }
