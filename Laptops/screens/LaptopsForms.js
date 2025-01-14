@@ -1,26 +1,38 @@
 import { View, Text, StyleSheet, Alert } from "react-native";
 import { Input, Button } from "@rneui/base";
 import { useState } from "react";
-import { saveLaptopRest } from "../rest_client/laptops";
+import { saveLaptopRest, updateLaptopRest } from "../rest_client/laptops";
 
-export const LaptopsForms = ({navigation}) => {
-  const [marca, setMarca] = useState();
-  const [procesador, setProcesador] = useState();
-  const [memoria, setMemoria] = useState();
-  const [disco, setDisco] = useState();
+export const LaptopsForms = ({ navigation, route }) => {
+  let laptopRetrieved = route.params.laptopParam;
+  let isNew = true;
+  if (laptopRetrieved != null) {
+    isNew = false;
+  }
+
+  const [marca, setMarca] = useState(isNew ? null : laptopRetrieved.marca);
+  const [procesador, setProcesador] = useState(
+    isNew ? null : laptopRetrieved.procesador
+  );
+  const [memoria, setMemoria] = useState(
+    isNew ? null : laptopRetrieved.memoria
+  );
+  const [disco, setDisco] = useState(isNew ? null : laptopRetrieved.disco);
 
   const showMessage = () => {
-    Alert.alert("Ok, se agregó la laptop");
-  };
-  const saveLaptop = () => {
+    Alert.alert("Ok,", isNew ? "Se agregó la laptop" : "Laptop actualizada");
     navigation.goBack();
+  };
+  const createLaptop = () => {
     saveLaptopRest(
-      {
-        marca: marca,
-        procesador: procesador,
-        memoria: memoria,
-        disco: disco,
-      },
+      { marca: marca, procesador: procesador, memoria: memoria, disco: disco },
+      showMessage
+    );
+  };
+
+  const updateLaptop = () => {
+    updateLaptopRest(
+      { id:laptopRetrieved.id, marca: marca, procesador: procesador, memoria: memoria, disco: disco },
       showMessage
     );
   };
@@ -55,7 +67,7 @@ export const LaptopsForms = ({navigation}) => {
           setDisco(value);
         }}
       />
-      <Button title="Guardar" onPress={saveLaptop} />
+      <Button title="Guardar" onPress={isNew ? createLaptop : updateLaptop} />
     </View>
   );
 };
